@@ -1,0 +1,48 @@
+//USES THE DATA CLASS
+
+package com.ayman.test;
+
+import com.google.gson.Gson;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.*;
+import java.util.Date;
+
+public final class PluginTesting extends JavaPlugin{
+
+    @Override
+    public void onEnable() {
+
+        Data data = new Data("Ayman", true, new Date());
+        try {
+            getDataFolder().mkdir(); //Make a data folder in case you don't have one
+            File file = new File(getDataFolder(), "data.json");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            //TO SAVE DATA
+//            Gson gson = new Gson();
+//            Writer writer = new FileWriter(file, false);
+//            gson.toJson(data, writer); //This will write everything to the new json file.
+//            writer.flush();
+//            writer.close(); //For no memory leaks
+//
+//            System.out.println("Data is saved!");
+
+            //TO RETRIEVE DATA
+            Gson gson = new Gson();
+            Reader reader = new FileReader(file);
+            Data readData = gson.fromJson(reader, Data.class);
+            System.out.println(readData.getPlayerName());
+            System.out.println(readData.getValue());
+            System.out.println(readData.getDate().toString());
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}
+
