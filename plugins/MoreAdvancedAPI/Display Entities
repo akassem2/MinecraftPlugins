@@ -1,0 +1,33 @@
+package com.ayman.test;
+
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public final class PluginTesting extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+
+        World world = Bukkit.getWorld("world");
+
+        // TEXT DISPLAYS
+        TextDisplay textDisplay = (TextDisplay)  world.spawnEntity(world.getBlockAt(0, 65, 0).getLocation(), EntityType.TEXT_DISPLAY);
+        textDisplay.setBillboard(Display.Billboard.CENTER); //Will turn to face the player
+        textDisplay.setText(ChatColor.GREEN + "Welcome to the testing grounds!");
+        textDisplay.setBackgroundColor(Color.AQUA);
+
+        // BLOCK DISPLAYS
+        BlockDisplay blockDisplay = (BlockDisplay) world.spawnEntity(world.getBlockAt(0, 70, 0).getLocation(), EntityType.BLOCK_DISPLAY);
+        blockDisplay.setBlock(Material.BIRCH_PLANKS.createBlockData());
+        blockDisplay.setBrightness(new Display.Brightness(10, 10));
+
+        // ITEM DISPLAYS
+        ItemDisplay itemDisplay = (ItemDisplay) world.spawnEntity(world.getBlockAt(0, 75, 0).getLocation(), EntityType.ITEM_DISPLAY);
+        itemDisplay.setItemStack(new ItemStack(Material.GLOWSTONE));
+        itemDisplay.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GUI);
+    }
+
+}
+
