@@ -1,0 +1,38 @@
+package com.ayman.test;
+
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+
+
+public final class PluginTesting extends JavaPlugin{
+
+    @Override
+    public void onEnable() {
+
+        try {
+            initiateFile("homes.yml");
+            initiateFile("warps.yml");
+            initiateFile("data.yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void initiateFile(String name) throws IOException {
+        //getDataFolder returns plugins folder so it knows where to store data
+        File file = new File(getDataFolder(), name);
+
+        if (!file.exists()) {
+                file.createNewFile();
+        }
+
+        YamlConfiguration modifyFile = YamlConfiguration.loadConfiguration(file);
+
+    }
+
+}

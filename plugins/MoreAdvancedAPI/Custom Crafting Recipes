@@ -1,0 +1,66 @@
+package com.ayman.test;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public final class PluginTesting extends JavaPlugin implements Listener {
+
+    @Override
+    public void onEnable() {
+        Bukkit.getPluginManager().registerEvents(this, this);
+//        Name space is the class, and the key is a unique thing to identify this
+        ShapedRecipe barrierRecipe = new ShapedRecipe(new NamespacedKey(this, "custom_diamond_sword"), new ItemStack(Material.BARRIER));
+        barrierRecipe.shape(
+                "R R",
+                " R ",
+                "R R");
+        barrierRecipe.setIngredient('R', Material.RED_WOOL);
+        Bukkit.addRecipe(barrierRecipe);
+
+        ItemStack wesleyHoe = new ItemStack(Material.IRON_HOE);
+        wesleyHoe.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
+        ItemMeta wesleyMeta = wesleyHoe.getItemMeta();
+        wesleyMeta.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD + "Guzzlers Hoe");
+        wesleyHoe.setItemMeta(wesleyMeta);
+
+        ShapedRecipe customIronHoeRecipe = new ShapedRecipe(new NamespacedKey(this, "custom_iron_hoe"), wesleyHoe);
+        customIronHoeRecipe.shape(
+                "III",
+                "ISI",
+                "ISI");
+
+        customIronHoeRecipe.setIngredient('S', Material.STICK);
+        customIronHoeRecipe.setIngredient('I', Material.IRON_INGOT);
+        Bukkit.addRecipe(customIronHoeRecipe);
+    }
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent e) {
+        if (e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.IRON_HOE)) {
+            e.getPlayer().getWorld().createExplosion(e.getPlayer().getLocation(), 10, true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (e.hasItem()) {
+            if (e.getItem().getType().equals(Material.IRON_HOE)) {
+                player.getWorld().spawn(player.getLocation().add(0, 10, 0), TNTPrimed.class);
+            }
+        }
+    }
+}
+
